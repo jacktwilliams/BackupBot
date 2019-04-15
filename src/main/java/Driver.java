@@ -4,17 +4,24 @@ import java.util.HashSet;
 import java.util.Scanner;
 
 public class Driver {
+	public static RecordStorage recStore;
+	//public static ProbabilityElem prob;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException {
 		// TODO Auto-generated method stub
 		runBackupCycle();
+		//PersistentManager.save(recStore, prob);
 	}
 	
-	public static void runBackupCycle() {
-		getDecisionFiles();
+	public static void runBackupCycle() throws ClassNotFoundException {
+		HashSet<FileRecord> undecided = getDecisionFiles();
+		/*
+		 * FeatureAttribution.attributeFeatures(undecided);
+		 * 
+		 */
 	}
 	
-	public static void getDecisionFiles() {
+	public static HashSet<FileRecord> getDecisionFiles() throws ClassNotFoundException {
 		ProcessBuilder pb = new ProcessBuilder("./findCom.sh");
 		pb.directory(new File("/home/jack"));
 		
@@ -31,15 +38,16 @@ public class Driver {
 			e.printStackTrace();
 		}
 		
-		/* Eventually make recStore persistent. Only new files will be added and old files will hold their BackupStatus in the persistent storage.*/
-		HashSet<FileRecord> recStore = new HashSet<FileRecord>();
+		recStore = PersistentManager.getFileRecords();
 		while(readF.hasNextLine()) {
 			FileRecord current = new FileRecord(readF.nextLine());
 			if (!current.getDirStatus()) {
-				recStore.add(current);
+				//add files which we haven't previously KEPT or IGNORED
+				recStore.addToStore(current);
 			}
 		}
-		
+
 		readF.close();
+		return recStore.getUndecidedFiles();
 	}
 }
