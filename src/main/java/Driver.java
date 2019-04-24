@@ -15,10 +15,10 @@ public class Driver {
 	
 	public static void runBackupCycle() throws ClassNotFoundException {
 		HashSet<FileRecord> undecided = getDecisionFiles();
-		/*
-		 * FeatureAttribution.attributeFeatures(undecided);
-		 * 
-		 */
+		
+		FeatureAttribution.attributeFeatures(undecided);
+		 
+		
 	}
 	
 	public static HashSet<FileRecord> getDecisionFiles() throws ClassNotFoundException {
