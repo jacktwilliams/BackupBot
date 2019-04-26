@@ -1,14 +1,18 @@
+package storage;
 import java.io.File;
+import java.io.Serializable;
 import java.nio.file.Path;
 import java.util.HashSet;
 
 import constants.BackupStatus;
+import probability.Feature;
 
-public class FileRecord {
+public class FileRecord implements Serializable {
+	private static final long serialVersionUID = 4630718825423862065L;
 	private BackupStatus status = BackupStatus.UNDECIDED;
 	private Path path;
 	private boolean isDir;
-	private HashSet<Feature> features;
+	private HashSet<Feature> features = new HashSet<Feature>();
 	
 	public FileRecord(String p) {
 		path = new File(p).toPath();
@@ -25,7 +29,7 @@ public class FileRecord {
 	 * Equals depends on this method. When we go to add a moved file to the recStore, they won't be equal, so we will add a new record.
 	 */
 	public String toString() {
-		return path.toUri().toString();
+		return path.toAbsolutePath().toString();
 	}
 	
 	public int hashCode() {
@@ -61,5 +65,13 @@ public class FileRecord {
 	
 	public void addFeature(Feature f) {
 		this.features.add(f);
+	}
+	
+	public HashSet<Feature> getFeatures() {
+		return this.features;
+	}
+	
+	public void setBackupStatus(BackupStatus s) {
+		this.status = s;
 	}
 }
