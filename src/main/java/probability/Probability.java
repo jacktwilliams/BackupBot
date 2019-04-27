@@ -7,8 +7,8 @@ import storage.FileRecord;
 
 public class Probability implements Serializable {
 	private static final long serialVersionUID = 8555873221847634332L;
-	private int totalFiles = 0;
-	private int totalDesirable = 0;
+	private int totalFiles = 2; //avoid division by zero
+	private int totalDesirable = 1; //start with 1/2 probability.
 	private HashSet<FeatureCountTup> features = new HashSet<FeatureCountTup>();
 	//private HashSet<FeatureCountTup> featurePurgatory = new HashSet<FeatureCountTup>(); TODO: we still don't need this right?
 	

@@ -4,13 +4,15 @@ import java.lang.ProcessBuilder.Redirect;
 import java.util.HashSet;
 import java.util.Scanner;
 
+import probability.Decision;
+import probability.Probability;
 import storage.FileRecord;
 import storage.PersistentManager;
 import storage.RecordStorage;
 
 public class Driver {
 	public static RecordStorage recStore;
-	//public static ProbabilityElem prob;
+	public static Probability prob;
 
 	public static void main(String[] args) throws ClassNotFoundException {
 		// TODO Auto-generated method stub
@@ -21,16 +23,19 @@ public class Driver {
 	public static void runBackupCycle() throws ClassNotFoundException {
 		HashSet<FileRecord> undecided = getDecisionFiles();
 		FeatureAttribution.attributeFeatures(undecided);
+		prob = new Probability();
+		Decision.getOrderedBackupList(undecided, prob);
 		/*BackupManager.backupAsAppropriate(recStore);*/
 	}
 	
 	public static HashSet<FileRecord> getDecisionFiles() throws ClassNotFoundException {
-		ProcessBuilder pb = new ProcessBuilder("./findCom.sh");
-		pb.directory(new File("/home/jack"));
-		
+		produceFindCommand();
+		String baseDir = "/home/jack/dev/";
+		ProcessBuilder pb = new ProcessBuilder("/home/jack/.backupBot/findCom.sh");
+		pb.directory(new File(baseDir));
 		File logF = new File("findLog.txt");
 		pb.redirectError(Redirect.appendTo(logF));
-		pb.redirectOutput(Redirect.appendTo(logF));
+		pb.redirectOutput(Redirect.appendTo(logF));		
 		
 		Scanner readF = null;
 		try {
@@ -43,7 +48,7 @@ public class Driver {
 		
 		recStore = PersistentManager.getFileRecords();
 		while(readF.hasNextLine()) {
-			FileRecord current = new FileRecord(readF.nextLine());
+			FileRecord current = new FileRecord(readF.nextLine().replaceFirst(".", baseDir));
 			if (!current.getDirStatus()) {
 				//add files which we haven't previously KEPT or IGNORED
 				recStore.addToStore(current);
@@ -52,5 +57,17 @@ public class Driver {
 
 		readF.close();
 		return recStore.getUndecidedFiles();
+	}
+	
+	public static void produceFindCommand() {
+		ProcessBuilder pb = new ProcessBuilder("/home/jack/.backupBot/constructFind.py");
+		pb.directory(new File("/home/jack/.backupBot"));
+		pb.redirectErrorStream(true);
+		try {
+			pb.start();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

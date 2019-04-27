@@ -25,14 +25,14 @@ public class FeatureAttribution {
 		try {
 			ls = runLS(file.toString());
 			
-			String sizeValue = "";
 			scan = new Scanner(ls);
 	
-			sizeValue = Integer.toString(scan.nextInt());
+			int sizeValue = scan.nextInt();
 	
 			Feature size = new Feature(FeatureTypes.SIZE, sizeValue);
 	
 			file.addFeature(size);
+			file.setSize(sizeValue);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error getting stuff");
@@ -53,13 +53,13 @@ public class FeatureAttribution {
 	
 	private static String runLS(String path) throws IOException {
 		String output = "";
-		
-		String command = "ls -s " + path;
-		Process proc = Runtime.getRuntime().exec(command);
+		ProcessBuilder procB = new ProcessBuilder("ls", "-s", "-k", path);
+		procB.redirectErrorStream(true);
+		Process proc = procB.start();
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 		output = reader.readLine();
-		
+		System.out.println(output);
 		return output;
 	}
 

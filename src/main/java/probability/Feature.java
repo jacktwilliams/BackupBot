@@ -13,6 +13,32 @@ public class Feature implements Serializable {
 		this.feature = feature;
 	}
 	
+	public Feature(FeatureTypes type, int size) {
+		this.type = type;
+		
+		if (size < 10) {
+			this.feature = "10KB";
+		}
+		else if (size < 100) {
+			this.feature = "100KB";
+		}
+		else if (size < 1000) {
+			this.feature = "1MB";
+		}
+		else if (size < 10000) {
+			this.feature = "10MB";  
+		}
+		else if (size < 100000) {
+			this.feature = "100MB";
+		}
+		else if (size < 1000000) {
+			this.feature = "1GB";
+		}
+		else {
+			this.feature = ">1GB";
+		}
+	}
+	
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;

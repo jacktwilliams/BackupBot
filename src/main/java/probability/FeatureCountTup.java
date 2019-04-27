@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class FeatureCountTup implements Serializable {
 	private static final long serialVersionUID = -8668919896296667620L;
 	private Feature feature;
-	private int countDesirable = 0;
-	private int totalCount = 0;
+	private int countDesirable = 1;
+	private int totalCount = 2;
 	
 	public FeatureCountTup(Feature f) {
 		this.feature = f;

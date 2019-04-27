@@ -13,6 +13,7 @@ public class FileRecord implements Serializable {
 	private Path path;
 	private boolean isDir;
 	private HashSet<Feature> features = new HashSet<Feature>();
+	private int size;
 	
 	public FileRecord(String p) {
 		path = new File(p).toPath();
@@ -73,5 +74,13 @@ public class FileRecord implements Serializable {
 	
 	public void setBackupStatus(BackupStatus s) {
 		this.status = s;
+	}
+	
+	public void setSize(int s) {
+		this.size = s;
+	}
+	
+	public int getSize() {
+		return this.size;
 	}
 }
