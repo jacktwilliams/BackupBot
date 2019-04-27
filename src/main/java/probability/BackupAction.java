@@ -55,4 +55,8 @@ public class BackupAction implements Comparable<BackupAction> {
 	public int getExpectedUtility() {
 		return this.expectedUtility;
 	}
+	
+	public String toString() {
+		return this.file + ": " + this.expectedUtility;
+	}
 }

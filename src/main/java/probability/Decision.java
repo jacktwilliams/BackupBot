@@ -15,7 +15,7 @@ public class Decision {
 		for (FileRecord rec : undecided) {
 			double pDesirable = prob.getProbabilityOfDesirabilityForFile(rec);
 			double pNotDesirable = 1 - pDesirable;
-			int chunksConsumed = rec.getSize() / chunk;
+			int chunksConsumed = rec.getSize() / chunk; //TODO: optimization
 			
 			int expectedUtilityKEEP = (int) ((pDesirable * PerformanceMeasure.desirable) + 
 										 (pNotDesirable * PerformanceMeasure.unDesirable) + 

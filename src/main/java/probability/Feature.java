@@ -58,7 +58,15 @@ public class Feature implements Serializable {
 		}
 	}
 	
+	public int hashCode() {
+		return this.feature.hashCode();
+	}
+	
 	public String toString() {
 		return this.type.toString() + ": " + feature;
+	}
+	
+	public FeatureTypes getFeatType() {
+		return this.type;
 	}
 }
