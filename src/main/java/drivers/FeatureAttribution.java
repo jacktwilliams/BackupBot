@@ -42,9 +42,17 @@ public class FeatureAttribution {
 	
 	private static void addExtension(FileRecord file, String path) {
 		String extensionValue = "";
+		int indexOfExtension = 0;
 		
 		if (!file.getDirStatus()) {
-			extensionValue = path.substring(path.lastIndexOf(".") + 1);
+			indexOfExtension = path.lastIndexOf(".");
+			
+			if (indexOfExtension != -1) {
+				extensionValue = path.substring(path.lastIndexOf(".") + 1);	
+			}
+			else {
+				extensionValue = "none";
+			}
 			
 			Feature extension = new Feature(FeatureTypes.EXTENSION, extensionValue);
 			file.addFeature(extension);
