@@ -1,5 +1,6 @@
 package drivers;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
@@ -54,6 +55,7 @@ public class FeatureAttribution {
 	private static String runLS(String path) throws IOException {
 		String output = "";
 		ProcessBuilder procB = new ProcessBuilder("ls", "-s", "-k", path);
+		procB.directory(new File("/"));
 		procB.redirectErrorStream(true);
 		Process proc = procB.start();
 		

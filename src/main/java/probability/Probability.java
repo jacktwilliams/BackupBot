@@ -87,7 +87,7 @@ public class Probability implements Serializable {
 	}
 	
 	private void priorKnowledgeFeatCounts() {
-		String[] extensions = {"txt", "png", "mp3", "java", "lisp", "js", "docx", "jpg", };
+		String[] extensions = {"txt", "png", "mp3", "java", "lisp", "js", "docx", "jpg", "xml", "py", "csv", "pdf"};
 		for (String ext : extensions) {
 			features.add(new FeatureCountTup(new Feature(FeatureTypes.EXTENSION, ext), 2, 2));
 		}

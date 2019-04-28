@@ -10,6 +10,7 @@ import storage.FileRecord;
 public class BackupAction implements Comparable<BackupAction> {
 	private FileRecord file;
 	private int expectedUtility;
+	private double probDesirable;
 	
 	public BackupAction(FileRecord f, int eu) {
 		this.file = f;

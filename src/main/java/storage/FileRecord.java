@@ -30,7 +30,7 @@ public class FileRecord implements Serializable {
 	 * Equals depends on this method. When we go to add a moved file to the recStore, they won't be equal, so we will add a new record.
 	 */
 	public String toString() {
-		return path.toAbsolutePath().toString();
+		return path.toString();
 	}
 	
 	public int hashCode() {
