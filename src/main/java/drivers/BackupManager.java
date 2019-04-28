@@ -14,10 +14,14 @@ public interface BackupManager {
 	 */
 	public void keepFile(FileRecord f);
 	
+	public boolean keepFile(String path);
+	
 	/*
 	 * Handles physical backing up in storage as well as updating probability model and file record.
 	 */
 	public void ignoreFile(FileRecord f);
+	
+	public boolean ignoreFile(String path);
 	
 	public List<FileRecord> getQuestionableFiles(int num);
 	
@@ -30,6 +34,10 @@ public interface BackupManager {
 	public void addQuestionableFile(FileRecord f);
 	
 	public void setQuestionableFiles(List<FileRecord> questionables);
+	
+	public List<FileRecord> getAllKeptFiles();
+	
+	public List<FileRecord> getAllIgnoreFiles();
 	
 	
 	
