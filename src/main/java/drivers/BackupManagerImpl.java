@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
+import constants.UserConfigConstants;
 import probability.BackupAction;
 import probability.Probability;
 import probability.QuestionableFile;
@@ -14,9 +15,6 @@ import storage.FileRecord;
 import storage.RecordStorage;
 
 public class BackupManagerImpl {
-	private static final String STORAGELOC = "/home/jack/dev/backupTest/";
-	public static final int STORAGESIZE = 30016144; //in kb
-
 	private static final int maxQuestionable = 500;
 	private Probability probElem;
 	private PriorityQueue<QuestionableFile> questionable;
@@ -48,8 +46,8 @@ public class BackupManagerImpl {
 		this.questionable.add(f);		
 	}
 
-	public void setQuestionableFiles(List<FileRecord> questionables) {
-		
+	public void setQuestionableFiles(PriorityQueue<QuestionableFile> questionables) {
+		this.questionable = questionables;
 	}
 
 	public Probability getProbElem() {
@@ -67,11 +65,10 @@ public class BackupManagerImpl {
 	    List<String> com = new ArrayList<String>();
 	    com.add("/bin/bash");
 	    com.add("-c");
-	    com.add("/home/jack/.backupBot/backup.sh " + f.toString() + " /home/jack/dev/backupTest");
-	    com.add(f.toString());
+	    com.add("rsync -aqzrR " + f.toString() + " " + UserConfigConstants.STORAGEDIR);
 		ProcessBuilder proc = new ProcessBuilder(com);
 		proc.redirectErrorStream(true);
-		proc.directory(new File("/"));
+		//proc.directory(new File("/"));
 		Scanner readErr = null;
 		try {
 			Process p = proc.start();
@@ -86,7 +83,22 @@ public class BackupManagerImpl {
 	}
 	
 	private static void rmFile(FileRecord f) {
-		
+		List<String> com = new ArrayList<String>();
+		com.add("/bin/bash");
+		com.add("-c");
+		com.add("rm -rf " + UserConfigConstants.STORAGEDIR + f.toString());
+		ProcessBuilder pb = new ProcessBuilder(com);
+		pb.redirectErrorStream(true);
+		Scanner readErr = null;
+		try {
+			Process p = pb.start();
+			readErr = new Scanner(p.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		while (readErr.hasNextLine()) {
+			System.out.println(readErr.nextLine());
+		}
 	}
 
 	public boolean keepFile(String input) {
@@ -103,7 +115,7 @@ public class BackupManagerImpl {
 		if(f == null) {
 			return false;
 		}
-		this.keepFile(f);
+		rmFile(f);
 		return true;
 	}
 	

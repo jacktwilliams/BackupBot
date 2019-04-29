@@ -7,6 +7,6 @@ public class PerformanceMeasure {
 	 * By using 1/10 of the chunks you will have a -100000 penalty, meaning it can't be desirable to back up the file.
 	 */
 	public static int desirable = 100000;
-	public static int unDesirable = -80000;
+	public static int unDesirable = -49000;
 	public static int oneChunkConsumed = -1;
 }

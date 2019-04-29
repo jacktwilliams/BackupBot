@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
+import constants.UserConfigConstants;
 import probability.BackupAction;
 import probability.Decision;
 import probability.Probability;
@@ -21,31 +22,38 @@ public class Driver {
 
 	public static void main(String[] args) throws ClassNotFoundException {
 		// TODO Auto-generated method stub
+		recStore = PersistentManager.getFileRecords();
+		prob = PersistentManager.getProbElem();
+		bman = new BackupManagerImpl();
+		bman.setQuestionableFiles(PersistentManager.getQuestionableFiles());
+		bman.setProbElem(prob);
+		bman.setRecStore(recStore);
+		
 		runBackupCycle();
-		//PersistentManager.save(recStore, prob);
+		
+		PersistentManager.storeFileRecords(recStore);
+		PersistentManager.storeProbElem(prob);
+		
+		Critic.runCritic(bman);
+
+		PersistentManager.storeQuestionableFiles(bman.getQuestionableFiles());		
 	}
 	
 	public static void runBackupCycle() throws ClassNotFoundException {
 		HashSet<FileRecord> undecided = getDecisionFiles();
 		FeatureAttribution.attributeFeatures(undecided);
-		prob = new Probability();
-		bman = new BackupManagerImpl();
-		bman.setProbElem(prob);
-		bman.setRecStore(recStore);
 		PriorityQueue<BackupAction> choices = Decision.getOrderedBackupList(undecided, bman);
 		bman.backupFiles(choices);
-		Critic.runCritic(bman);
 	}
 	
 	public static HashSet<FileRecord> getDecisionFiles() throws ClassNotFoundException {
-		//String baseDir = "/home/jack/dev";
-		produceFindCommand("/home/jack/.backupBot");
+		produceFindCommand();
 	    List<String> com = new ArrayList<String>();
 	    com.add("/bin/bash");
 	    com.add("-c");
-	    com.add("/home/jack/.backupBot/findCom.sh");
+	    com.add(UserConfigConstants.INSTALLDIR + "/findCom.sh");
 		ProcessBuilder pb = new ProcessBuilder(com);
-		pb.directory(new File("/"));
+		//pb.directory(new File("/"));
 		pb.redirectErrorStream(true);		
 		
 		Scanner readF = null;
@@ -57,7 +65,6 @@ public class Driver {
 			e.printStackTrace();
 		}
 		
-		recStore = PersistentManager.getFileRecords();
 		while(readF.hasNextLine()) {
 			String givenPath = readF.nextLine();
 			FileRecord current = new FileRecord(givenPath);
@@ -71,13 +78,13 @@ public class Driver {
 		return recStore.getUndecidedFiles();
 	}
 	
-	public static void produceFindCommand(String instDir) {
+	public static void produceFindCommand() {
 	    List<String> com = new ArrayList<String>();
 	    com.add("/bin/bash");
 	    com.add("-c");
-	    com.add("/home/jack/.backupBot/constructFind.py /home/jack/dev");
+	    com.add(UserConfigConstants.INSTALLDIR + "/constructFind.py " + UserConfigConstants.CRAWLBASEDIR);
 		ProcessBuilder pb = new ProcessBuilder(com);
-		pb.directory(new File(instDir));
+		//pb.directory(); don't think this needs to be set
 		pb.redirectErrorStream(true);
 		
 		Scanner readErr = null;

@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -62,7 +63,11 @@ public class FeatureAttribution {
 	
 	private static String runLS(String path) throws IOException {
 		String output = "";
-		ProcessBuilder procB = new ProcessBuilder("ls", "-s", "-k", path);
+		ArrayList<String> com = new ArrayList<String>();
+		com.add("/bin/bash");
+		com.add("-c");
+		com.add("ls -s -k " + path);
+		ProcessBuilder procB = new ProcessBuilder(com);
 		procB.directory(new File("/"));
 		procB.redirectErrorStream(true);
 		Process proc = procB.start();
