@@ -1,12 +1,16 @@
 package probability;
 
+import java.io.Serializable;
+
 import storage.FileRecord;
 
 /*
  * This class holds a file along with it's current probability of desirability.
  * These are non persistent objects.
  */
-public class QuestionableFile implements Comparable<QuestionableFile> {
+public class QuestionableFile implements Serializable, Comparable<QuestionableFile> {
+
+	private static final long serialVersionUID = 5183746629218121892L;
 	private FileRecord file;
 	private double probDesirable;
 	
@@ -17,6 +21,10 @@ public class QuestionableFile implements Comparable<QuestionableFile> {
 	
 	public double getProbDesirable() {
 		return this.probDesirable;
+	}
+	
+	public void setProbDesirable(double p) {
+		this.probDesirable = p;
 	}
 	
 	public FileRecord getFile() {

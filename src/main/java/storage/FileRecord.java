@@ -10,18 +10,18 @@ import probability.Feature;
 public class FileRecord implements Serializable {
 	private static final long serialVersionUID = 4630718825423862065L;
 	private BackupStatus status = BackupStatus.UNDECIDED;
-	private Path path;
+	private String path;
 	private boolean isDir;
 	private HashSet<Feature> features = new HashSet<Feature>();
 	private int size;
 	
 	public FileRecord(String p) {
-		path = new File(p).toPath();
+		path = p;
 		isDir = checkDirStatus();
 	}
 	
 	private boolean checkDirStatus() {
-		return path.toUri().toString().endsWith("/");
+		return new File(this.path).toPath().toUri().toString().endsWith("/");
 	}
 	
 	/*

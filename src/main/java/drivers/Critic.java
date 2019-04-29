@@ -22,6 +22,7 @@ public class Critic {
 		
 		if (input.equals("y")) {
 			runTraining(backup, 10);
+			runMenu(backup);
 		}
 		else if (input.equals("n")) {
 			runMenu(backup);
@@ -38,18 +39,15 @@ public class Critic {
 		System.out.println("We will display files names one at a time.");
 		System.out.println("Please indicate if you would like said file backed up or not.\n");
 		
-		int i = 0;
 		outerLoop:
-		for (QuestionableFile file: backup.getQuestionableFiles()) {
-			if (i == (reps - 1)) {
-				break outerLoop;
-			}
+		for(int i = 0; i < reps; ++i) {
+			
+			QuestionableFile file = backup.getMostQuestionable();
 			FileRecord f = file.getFile();
 			validInput = false;
 			
 			System.out.println("File: " + file.toString() + " [y/n/exit]");
 			
-			++i;
 			while (!validInput) {
 				
 				input = scan.next().toLowerCase();
@@ -57,10 +55,12 @@ public class Critic {
 				if (input.equals("y")) {
 					validInput = true;
 					backup.keepFile(f);
+					backup.trainingResponse(file);
 				}
 				else if (input.equals("n")) {
 					validInput = true;
 					backup.ignoreFile(f);
+					backup.trainingResponse(file);
 				}
 				else if (input.equals("exit")) {
 					validInput = true;

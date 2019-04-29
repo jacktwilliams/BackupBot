@@ -1,8 +1,11 @@
 package drivers;
 
+import probability.Feature;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Scanner;
@@ -129,6 +132,43 @@ public class BackupManagerImpl {
 	
 	public String getAllIgnoredFilesString() {
 		return this.recStore.getAllIgnoredFilesString();
+	}
+
+	public void trainingResponse(QuestionableFile file) {
+		/*
+		 * all FeatureCountTups of the file have been updated if the response switched the file from KEEP to IGNORE
+		 * 	or vice versa. Go through all files. If they have one of these features. Recalculate their probability.
+		 * Then, re-insert into queue to get a re-ordering.
+		 */
+		HashSet<Feature> updatedFeats = file.getFile().getFeatures();
+		LinkedList<QuestionableFile> toUpdate = new LinkedList<QuestionableFile>();
+		
+		for (QuestionableFile qf : this.questionable) {
+			if (fileHasAnyFeatureInSet(qf, updatedFeats)) {
+				qf.setProbDesirable(this.probElem.getProbabilityOfDesirabilityForFile(qf.getFile()));
+				toUpdate.add(qf);
+			}
+		}
+		
+		for (QuestionableFile qf : toUpdate) {
+			this.questionable.remove(qf);
+			this.questionable.add(qf);
+		}
+	}
+	
+	private boolean fileHasAnyFeatureInSet(QuestionableFile qf, HashSet<Feature> feats) {
+		for (Feature f : qf.getFile().getFeatures()) {
+			if (feats.contains(f)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public QuestionableFile getMostQuestionable() {
+		QuestionableFile f = this.questionable.peek();
+		this.questionable.remove(f);
+		return f;
 	}
 
 }
