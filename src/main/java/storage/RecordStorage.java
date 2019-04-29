@@ -1,6 +1,8 @@
 package storage;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.LinkedList;
+
 import constants.BackupStatus;
 
 public class RecordStorage implements Serializable{
@@ -50,5 +52,53 @@ public class RecordStorage implements Serializable{
 			}
 		}
 		return undecided;
+	}
+	
+	public LinkedList<FileRecord> getAllKeptFiles() {
+		LinkedList<FileRecord> keptList = new LinkedList<FileRecord>();
+		
+		for (FileRecord f : this.recStore) {
+			if (f.getBackupStatus() == BackupStatus.KEPT) {
+				keptList.add(f);
+			}
+		}
+		
+		return keptList;
+	}
+	
+	public String getAllKeptFilesString() {
+		StringBuilder res = new StringBuilder();
+		
+		for (FileRecord f : this.recStore) {
+			if (f.getBackupStatus() == BackupStatus.KEPT) {
+				res.append(f + "\n");
+			}
+		}
+		
+		return res.toString();
+	}
+	
+	public LinkedList<FileRecord> getAllIgnoredFiles() {
+		LinkedList<FileRecord> keptList = new LinkedList<FileRecord>();
+		
+		for (FileRecord f : this.recStore) {
+			if (f.getBackupStatus() == BackupStatus.IGNORED) {
+				keptList.add(f);
+			}
+		}
+		
+		return keptList;
+	}
+	
+	public String getAllIgnoredFilesString() {
+		StringBuilder res = new StringBuilder();
+		
+		for (FileRecord f : this.recStore) {
+			if (f.getBackupStatus() == BackupStatus.IGNORED) {
+				res.append(f + "\n");
+			}
+		}
+		
+		return res.toString();
 	}
 }

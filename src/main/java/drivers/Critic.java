@@ -1,6 +1,7 @@
 package drivers;
 import java.util.Scanner;
 
+import probability.QuestionableFile;
 import storage.FileRecord;
 
 
@@ -11,7 +12,7 @@ public class Critic {
 	private static int menuSelect;
 	private static boolean validInput;
 	
-	public static void runCritic(BackupManager backup) {
+	public static void runCritic(BackupManagerImpl backup) {
 		
 		scan = new Scanner(System.in);
 		
@@ -20,7 +21,7 @@ public class Critic {
 		input = scan.next().toLowerCase();
 		
 		if (input.equals("y")) {
-			runTraining(backup);
+			runTraining(backup, 10);
 		}
 		else if (input.equals("n")) {
 			runMenu(backup);
@@ -31,30 +32,35 @@ public class Critic {
 		
 	}
 	
-	private static void runTraining(BackupManager backup) {
+	private static void runTraining(BackupManagerImpl backup, int reps) {
 		
 		System.out.println("Welcome to the training session!");
 		System.out.println("We will display files names one at a time.");
 		System.out.println("Please indicate if you would like said file backed up or not.\n");
 		
+		int i = 0;
 		outerLoop:
-		for (FileRecord file: backup.getQuestionableFiles(10)) {
-			
+		for (QuestionableFile file: backup.getQuestionableFiles()) {
+			if (i == (reps - 1)) {
+				break outerLoop;
+			}
+			FileRecord f = file.getFile();
 			validInput = false;
 			
 			System.out.println("File: " + file.toString() + " [y/n/exit]");
 			
+			++i;
 			while (!validInput) {
 				
 				input = scan.next().toLowerCase();
 				
 				if (input.equals("y")) {
 					validInput = true;
-					backup.keepFile(file);
+					backup.keepFile(f);
 				}
 				else if (input.equals("n")) {
 					validInput = true;
-					backup.ignoreFile(file);
+					backup.ignoreFile(f);
 				}
 				else if (input.equals("exit")) {
 					validInput = true;
@@ -68,7 +74,7 @@ public class Critic {
 		}
 	}
 	
-	private static void runMenu(BackupManager backup) {
+	private static void runMenu(BackupManagerImpl backup) {
 		
 		boolean runMenu = true;
 		
@@ -89,12 +95,12 @@ public class Critic {
 			switch (menuSelect) {
 				case 1:
 					validInput = true;
-					backup.getAllKeptFiles();
+					System.out.println(backup.getAllKeptFilesString());
 					break;
 					
 				case 2:
 					validInput = true;
-					backup.getAllIgnoreFiles();
+					System.out.println(backup.getAllIgnoredFilesString());
 					break;
 					
 				case 3:

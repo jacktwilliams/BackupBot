@@ -31,8 +31,10 @@ public class Driver {
 		prob = new Probability();
 		bman = new BackupManagerImpl();
 		bman.setProbElem(prob);
+		bman.setRecStore(recStore);
 		PriorityQueue<BackupAction> choices = Decision.getOrderedBackupList(undecided, bman);
 		bman.backupFiles(choices);
+		Critic.runCritic(bman);
 	}
 	
 	public static HashSet<FileRecord> getDecisionFiles() throws ClassNotFoundException {

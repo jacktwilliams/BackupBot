@@ -1,2 +1,3 @@
 #!/bin/bash
-rsync -azR $1 $2
+echo $@
+rsync -aqzR $1 $2

@@ -1,6 +1,8 @@
 package drivers;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Scanner;
@@ -9,6 +11,7 @@ import probability.BackupAction;
 import probability.Probability;
 import probability.QuestionableFile;
 import storage.FileRecord;
+import storage.RecordStorage;
 
 public class BackupManagerImpl {
 	private static final String STORAGELOC = "/home/jack/dev/backupTest/";
@@ -17,6 +20,7 @@ public class BackupManagerImpl {
 	private static final int maxQuestionable = 500;
 	private Probability probElem;
 	private PriorityQueue<QuestionableFile> questionable;
+	private RecordStorage recStore;
 
 	public BackupManagerImpl() {
 		questionable = new PriorityQueue<QuestionableFile>(maxQuestionable);
@@ -60,8 +64,14 @@ public class BackupManagerImpl {
 	}
 	
 	private static void backupFile(FileRecord f) {
-		ProcessBuilder proc = new ProcessBuilder("/home/jack/.backupBot/backup.sh");
+	    List<String> com = new ArrayList<String>();
+	    com.add("/bin/bash");
+	    com.add("-c");
+	    com.add("/home/jack/.backupBot/backup.sh " + f.toString() + " /home/jack/dev/backupTest");
+	    com.add(f.toString());
+		ProcessBuilder proc = new ProcessBuilder(com);
 		proc.redirectErrorStream(true);
+		proc.directory(new File("/"));
 		Scanner readErr = null;
 		try {
 			Process p = proc.start();
@@ -77,6 +87,36 @@ public class BackupManagerImpl {
 	
 	private static void rmFile(FileRecord f) {
 		
+	}
+
+	public boolean keepFile(String input) {
+		FileRecord f = this.recStore.getFromStore(input);
+		if(f == null) {
+			return false;
+		}
+		this.keepFile(f);
+		return true;
+	}
+
+	public boolean ignoreFile(String input) {
+		FileRecord f = this.recStore.getFromStore(input);
+		if(f == null) {
+			return false;
+		}
+		this.keepFile(f);
+		return true;
+	}
+	
+	public void setRecStore(RecordStorage rs) {
+		this.recStore = rs;
+	}
+	
+	public String getAllKeptFilesString() {
+		return this.recStore.getAllKeptFilesString();
+	}
+	
+	public String getAllIgnoredFilesString() {
+		return this.recStore.getAllIgnoredFilesString();
 	}
 
 }

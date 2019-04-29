@@ -6,7 +6,7 @@ import storage.FileRecord;
  * This class holds a file along with it's current probability of desirability.
  * These are non persistent objects.
  */
-public class QuestionableFile {
+public class QuestionableFile implements Comparable<QuestionableFile> {
 	private FileRecord file;
 	private double probDesirable;
 	
@@ -30,11 +30,11 @@ public class QuestionableFile {
 		if(this.equals(o)) {
 			return 0;
 		}
-		else if (uncertainty > oUncertainty){ //TODO: ensure correctness of compareTo
-			return -1;
+		else if (uncertainty > oUncertainty){
+			return 1;
 		}
 		else {
-			return 1;
+			return -1;
 		}
 	}
 	
@@ -55,5 +55,9 @@ public class QuestionableFile {
 		else {
 			return false;
 		}
+	}
+	
+	public String toString() {
+		return this.getFile().toString();
 	}
 }
