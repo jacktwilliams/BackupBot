@@ -108,6 +108,7 @@ public class Critic {
 				case 3:
 					validInput = true;
 					System.out.println("Please input the path of a file you with to keep.");
+					scan.reset();
 					input = scan.nextLine();
 					if (backup.keepFile(input)) {
 						System.out.println("Successfully kept " + input);
@@ -120,6 +121,7 @@ public class Critic {
 				case 4:
 					validInput = true;
 					System.out.println("Please input the path of a file you wish to ignore.");
+					scan.reset();
 					input = scan.nextLine();
 					if (backup.ignoreFile(input)) {
 						System.out.println("Successfully ignored " + input);
