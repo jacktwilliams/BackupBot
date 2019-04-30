@@ -80,7 +80,7 @@ public class Critic {
 		boolean runMenu = true;
 		
 		System.out.println("Welcome to the menu!");
-		System.out.println("Input a number to run the given command.\n");
+		System.out.println("Input a number to run the given command.");
 		System.out.println(" [1] List all kept files.");
 		System.out.println(" [2] List all ignored files.");
 		System.out.println(" [3] Keep a file.");
@@ -92,23 +92,26 @@ public class Critic {
 		
 		while (!validInput) {
 			
+			scan.reset();
 			menuSelect = scan.nextInt();
 			
 			switch (menuSelect) {
 				case 1:
 					validInput = true;
+					System.out.println("Kept files:");
 					System.out.println(backup.getAllKeptFilesString());
 					break;
 					
 				case 2:
 					validInput = true;
+					System.out.println("Ignored files:");
 					System.out.println(backup.getAllIgnoredFilesString());
 					break;
 					
 				case 3:
 					validInput = true;
 					System.out.println("Please input the path of a file you with to keep.");
-					scan.reset();
+					scan.nextLine();
 					input = scan.nextLine();
 					if (backup.keepFile(input)) {
 						System.out.println("Successfully kept " + input);
@@ -121,7 +124,7 @@ public class Critic {
 				case 4:
 					validInput = true;
 					System.out.println("Please input the path of a file you wish to ignore.");
-					scan.reset();
+					scan.nextLine();
 					input = scan.nextLine();
 					if (backup.ignoreFile(input)) {
 						System.out.println("Successfully ignored " + input);
