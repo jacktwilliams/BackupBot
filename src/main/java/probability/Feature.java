@@ -19,6 +19,10 @@ public class Feature implements Serializable {
 		if (size < 10) {
 			this.feature = "10KB";
 		}
+
+		else if (size < 50) {
+			this.feature = "50KB";
+		}
 		else if (size < 100) {
 			this.feature = "100KB";
 		}
@@ -28,8 +32,14 @@ public class Feature implements Serializable {
 		else if (size < 10000) {
 			this.feature = "10MB";  
 		}
+		else if (size < 50000) {
+			this.feature = "50MB";
+		}
 		else if (size < 100000) {
 			this.feature = "100MB";
+		}
+		else if (size < 500000) {
+			this.feature = "500MB";
 		}
 		else if (size < 1000000) {
 			this.feature = "1GB";

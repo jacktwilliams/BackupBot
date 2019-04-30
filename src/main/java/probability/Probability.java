@@ -18,41 +18,51 @@ public class Probability implements Serializable {
 	}
 	
 	public void keepFile(FileRecord f) {
+		if (f.getBackupStatus() == BackupStatus.KEPT) {
+			System.out.println("File already backed up.");
+			return;
+		}
 		HashSet<Feature> fileFeatures = f.getFeatures();
 		for (Feature feat : fileFeatures) {
 			FeatureCountTup featCount = getFeatureCountFromSetOrAdd(feat);
 			
 			if (f.getBackupStatus() == BackupStatus.IGNORED) {
 				featCount.incrementDesirableCount();
-				++this.totalDesirable;
 			}
 			else {
 				featCount.incrementTotal();
 				featCount.incrementDesirableCount();
-				++this.totalFiles;
-				++this.totalDesirable;
 				//TODO: make sure no files already KEPT are getting here bc we will increment again.
 			}
 		}
-		
+		++this.totalDesirable;
+		if(f.getBackupStatus() != BackupStatus.IGNORED) {
+			++this.totalFiles;
+		}
 		f.setBackupStatus(BackupStatus.KEPT);
 	}
 	
 	public void ignoreFile(FileRecord f) {
+		if (f.getBackupStatus() == BackupStatus.IGNORED) {
+			System.out.println("File already Ignored.");
+			return;
+		}
 		HashSet<Feature> fileFeatures = f.getFeatures();
 		for (Feature feat : fileFeatures) {
 			FeatureCountTup featCount = getFeatureCountFromSetOrAdd(feat);
 			
 			if (f.getBackupStatus() == BackupStatus.KEPT) {
 				featCount.decrementDesirableCount(); //total was already incremented. Take back the desirability count
-				--this.totalDesirable;
+				//--this.totalDesirable;
 			}
 			else {
 				featCount.incrementTotal();
-				++this.totalFiles;
 			}
 		}
 		
+		if (f.getBackupStatus() != BackupStatus.KEPT) {
+			++this.totalFiles;
+		}
 		f.setBackupStatus(BackupStatus.IGNORED);
 	}
 	

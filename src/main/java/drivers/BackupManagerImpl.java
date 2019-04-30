@@ -18,7 +18,7 @@ import storage.FileRecord;
 import storage.RecordStorage;
 
 public class BackupManagerImpl {
-	private static final int maxQuestionable = 500;
+	private static final int maxQuestionable = 100;
 	private Probability probElem;
 	private PriorityQueue<QuestionableFile> questionable;
 	private RecordStorage recStore;
@@ -30,15 +30,39 @@ public class BackupManagerImpl {
 	public void setProbElem(Probability p) {
 		this.probElem = p;
 	}
-
+	
+	/* Hack of a method because of instance synch issues. */
 	public void keepFile(FileRecord f) {
+		FileRecord sameInstanceAsInStore = recStore.getFromStore(f.toString());
+		System.out.println(sameInstanceAsInStore == f);
+		if (sameInstanceAsInStore == null) {
+			recStore.addToStore(f);
+			sameInstanceAsInStore = f;
+		}
+
+		probElem.keepFile(sameInstanceAsInStore);
+		backupFile(sameInstanceAsInStore);
+		/*
 		probElem.keepFile(f);
-		backupFile(f);
+		System.out.println(recStore.getFromStore(f.toString()) == f);
+		*/
 	}
 
+	/* Hack of a method because of instance synch issues. */
 	public void ignoreFile(FileRecord f) {
+		FileRecord sameInstanceAsInStore = recStore.getFromStore(f.toString());
+		System.out.println(sameInstanceAsInStore == f);
+		
+		if (sameInstanceAsInStore == null) {
+			recStore.addToStore(f);
+			sameInstanceAsInStore = f;
+		}
+		probElem.ignoreFile(sameInstanceAsInStore);
+		rmFile(sameInstanceAsInStore);
+		/*
 		probElem.ignoreFile(f);
-		rmFile(f);
+		System.out.println(recStore.getFromStore(f.toString()) == f);
+		*/
 	}
 
 	public PriorityQueue<QuestionableFile> getQuestionableFiles() {
@@ -133,13 +157,14 @@ public class BackupManagerImpl {
 	public String getAllIgnoredFilesString() {
 		return this.recStore.getAllIgnoredFilesString();
 	}
-
+	
+	/*
+	 * This method is too slow.
 	public void trainingResponse(QuestionableFile file) {
 		/*
 		 * all FeatureCountTups of the file have been updated if the response switched the file from KEEP to IGNORE
 		 * 	or vice versa. Go through all files. If they have one of these features. Recalculate their probability.
 		 * Then, re-insert into queue to get a re-ordering.
-		 */
 		HashSet<Feature> updatedFeats = file.getFile().getFeatures();
 		LinkedList<QuestionableFile> toUpdate = new LinkedList<QuestionableFile>();
 		
@@ -155,6 +180,8 @@ public class BackupManagerImpl {
 			this.questionable.add(qf);
 		}
 	}
+*/
+
 	
 	private boolean fileHasAnyFeatureInSet(QuestionableFile qf, HashSet<Feature> feats) {
 		for (Feature f : qf.getFile().getFeatures()) {
@@ -164,7 +191,7 @@ public class BackupManagerImpl {
 		}
 		return false;
 	}
-
+	
 	public QuestionableFile getMostQuestionable() {
 		QuestionableFile f = this.questionable.peek();
 		this.questionable.remove(f);

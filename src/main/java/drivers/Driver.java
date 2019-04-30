@@ -28,14 +28,14 @@ public class Driver {
 		bman.setQuestionableFiles(PersistentManager.getQuestionableFiles());
 		bman.setProbElem(prob);
 		bman.setRecStore(recStore);
-		
+		System.out.println(recStore.getAllKeptFilesString());
 		runBackupCycle();
-		
-		PersistentManager.storeFileRecords(recStore);
-		PersistentManager.storeProbElem(prob);
 		
 		Critic.runCritic(bman);
 
+		recStore.purgeUndecided();
+		PersistentManager.storeFileRecords(recStore);
+		PersistentManager.storeProbElem(prob);
 		PersistentManager.storeQuestionableFiles(bman.getQuestionableFiles());		
 	}
 	
