@@ -55,12 +55,12 @@ public class Critic {
 				if (input.equals("y")) {
 					validInput = true;
 					backup.keepFile(f);
-					backup.trainingResponse(file);
+					//backup.trainingResponse(file);
 				}
 				else if (input.equals("n")) {
 					validInput = true;
 					backup.ignoreFile(f);
-					backup.trainingResponse(file);
+					//backup.trainingResponse(file);
 				}
 				else if (input.equals("exit")) {
 					validInput = true;
