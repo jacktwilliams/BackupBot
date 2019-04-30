@@ -17,6 +17,7 @@ public class Critic {
 		scan = new Scanner(System.in);
 		
 		System.out.println("Begin training session now? [y/n]");
+		System.out.println("Select 'n' to skip to Menu.");
 		
 		input = scan.next().toLowerCase();
 		
@@ -84,7 +85,8 @@ public class Critic {
 		System.out.println(" [2] List all ignored files.");
 		System.out.println(" [3] Keep a file.");
 		System.out.println(" [4] Ignore a file.");
-		System.out.println(" [5] Exit.\n");
+		System.out.println(" [5] Run training session.");
+		System.out.println(" [6] Exit.\n");
 		
 		validInput = false;
 		
@@ -128,6 +130,11 @@ public class Critic {
 					break;
 					
 				case 5:
+					runTraining(backup, 10);
+					runMenu(backup);
+					break;
+					
+				case 6:
 					validInput = true;
 					runMenu = false;
 					break;
