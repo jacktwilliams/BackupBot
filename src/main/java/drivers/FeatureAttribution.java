@@ -74,7 +74,7 @@ public class FeatureAttribution {
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 		output = reader.readLine();
-		System.out.println(output);
+		//System.out.println(output);
 		return output;
 	}
 

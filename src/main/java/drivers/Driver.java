@@ -28,12 +28,12 @@ public class Driver {
 		bman.setQuestionableFiles(PersistentManager.getQuestionableFiles());
 		bman.setProbElem(prob);
 		bman.setRecStore(recStore);
-		System.out.println(recStore.getAllKeptFilesString());
-		runBackupCycle();
 		
+		runBackupCycle();
 		Critic.runCritic(bman);
-
-		recStore.purgeUndecided();
+		
+		//Don't save UNDECIDED files. Re gather and compute their probabilities next time.
+		recStore.purgeUndecided(); 
 		PersistentManager.storeFileRecords(recStore);
 		PersistentManager.storeProbElem(prob);
 		PersistentManager.storeQuestionableFiles(bman.getQuestionableFiles());		

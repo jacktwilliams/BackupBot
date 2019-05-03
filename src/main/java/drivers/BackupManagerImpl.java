@@ -34,7 +34,7 @@ public class BackupManagerImpl {
 	/* Hack of a method because of instance synch issues. */
 	public void keepFile(FileRecord f) {
 		FileRecord sameInstanceAsInStore = recStore.getFromStore(f.toString());
-		System.out.println(sameInstanceAsInStore == f);
+		//System.out.println(sameInstanceAsInStore == f);
 		if (sameInstanceAsInStore == null) {
 			recStore.addToStore(f);
 			sameInstanceAsInStore = f;
@@ -51,7 +51,7 @@ public class BackupManagerImpl {
 	/* Hack of a method because of instance synch issues. */
 	public void ignoreFile(FileRecord f) {
 		FileRecord sameInstanceAsInStore = recStore.getFromStore(f.toString());
-		System.out.println(sameInstanceAsInStore == f);
+		//System.out.println(sameInstanceAsInStore == f);
 		
 		if (sameInstanceAsInStore == null) {
 			recStore.addToStore(f);
@@ -142,7 +142,7 @@ public class BackupManagerImpl {
 		if(f == null) {
 			return false;
 		}
-		rmFile(f);
+		ignoreFile(f);
 		return true;
 	}
 	

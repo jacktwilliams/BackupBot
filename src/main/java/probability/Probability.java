@@ -73,7 +73,7 @@ public class Probability implements Serializable {
 			FeatureCountTup featCount = getFeatureCountFromSetOrAdd(feat);
 			probAccumulation *= featCount.getProbabilityOfDesirabilityForFeature();
 		}
-		return probAccumulation * (this.totalDesirable / (double) this.totalFiles);
+		return probAccumulation; //* (this.totalDesirable / (double) this.totalFiles);
 	}
 	
 	private FeatureCountTup getFeatureCountFromSetOrAdd(Feature feat) {

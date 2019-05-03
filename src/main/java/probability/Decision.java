@@ -14,6 +14,7 @@ public class Decision {
 		PriorityQueue<BackupAction> backupChoices = new PriorityQueue<BackupAction>();
 		Probability prob = bman.getProbElem();
 		final int chunk = UserConfigConstants.STORAGESIZE / 1000000;
+		
 		for (FileRecord rec : undecided) {
 			double pDesirable = prob.getProbabilityOfDesirabilityForFile(rec);
 			bman.addQuestionableFile(new QuestionableFile(rec, pDesirable));
@@ -25,7 +26,7 @@ public class Decision {
 										 (chunksConsumed * PerformanceMeasure.oneChunkConsumed));
 			
 			//note that utility of skipping this file is 0.
-			System.out.println("Expected utility of " + rec + ": " + expectedUtilityKEEP);
+			System.out.println("P(desirable) = " + pDesirable + "; EU: " + expectedUtilityKEEP +" - " + rec);
 			if (expectedUtilityKEEP > 0) {
 				backupChoices.add(new BackupAction(rec, expectedUtilityKEEP));
 			}
