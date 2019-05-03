@@ -82,7 +82,7 @@ public class PersistentManager {
 		}
 		File probStoreF = new File(probStoreLoc);
 		if (!probStoreF.exists()) {
-			System.out.println("Can't find persistent probability element. Returning fresh Bayes Net");
+			System.out.println("Can't find persistent probability element. Returning fresh ProbElem.");
 			return new Probability();
 		}
 		
