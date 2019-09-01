@@ -1,8 +1,0 @@
-Error from rsync:
-/home/jack/dev/School/csWebTutoring/testsite
-urls.docx
-rsync: link_stat "/home/jack/dev/School/csWebTutoring/testsite" failed: No such file or directory (2)
-rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1196) [sender=3.1.2]
-
-
-Appears we are not handling spaces correctly, based on other outputs I am seeing as well.
